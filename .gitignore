@@ -1,0 +1,19 @@
+# --- Python / Django ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.log
+
+# Virtual environment
+venv/
+
+# Django stuff
+/static/
+media/
+*.pot
+*.pyc
+local_settings.py
+db.sqlite3
