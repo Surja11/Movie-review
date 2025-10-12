@@ -8,6 +8,8 @@ from rest_framework import status
 from dotenv import load_dotenv
 from rest_framework import generics
 from .serializers import *
+from django.core.cache import cache
+
 load_dotenv()
 
 # Create your views here.
@@ -20,6 +22,12 @@ class RegisterView(generics.CreateAPIView):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_movies(request):
+
+  cached_data = cache.get("tmdb_popular_movies")
+  if cached_data:
+    return Response(cached_data, status=status.HTTP_200_OK)
+  
+
   TMDB_BEARER = os.getenv('TMDB_BEARER')
   url = "https://api.themoviedb.org/3/movie/popular"
   headers = {
@@ -27,8 +35,10 @@ def get_movies(request):
       "Authorization": f"Bearer {TMDB_BEARER}"
   }
   response = requests.get(url, headers=headers)
-  print("tmdb bearer",TMDB_BEARER)
+  
+  data = response.json()
+  cache.set("tmdb_popular_movies", data, timeout=60*60*60)
 
   if response.status_code != 200:
     return Response({"error": "Failed to fetch data from TMDB"}, status=response.status_code)
-  return Response(response.json(), status=status.HTTP_200_OK)
+  return Response(data, status=status.HTTP_200_OK)
