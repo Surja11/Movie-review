@@ -2,7 +2,9 @@ import React from 'react'
 
 const MidSection = () => {
   return (
-    <div>MidSection</div>
+    <div>
+      <h1>Trending</h1>
+    </div>
   )
 }
 
