@@ -3,6 +3,7 @@ import { SliderdataContext } from "../context/SliderdataContext";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { NavLink } from "react-router-dom";
 
 const Carousel = () => {
   const { sliderdata, isLoading, error } = useContext(SliderdataContext);
@@ -56,7 +57,7 @@ const Carousel = () => {
             <div className="w-1/2 flex flex-col justify-center items-start text-amber-100 space-y-4 pr-8 pl-4">
               <h1 className="text-4xl font-bold">{movie.title}</h1>
               <p className="text-sm text-gray-300 line-clamp-4">{movie.overview}</p>
-              <button className="border p-2 rounded-2xl bg-amber-100  text-purple-950 brightness-80 hover:bg-[#EAB8E4] hover:transition">See More</button>
+              <NavLink to={`movies/${movie.id}`} className="border p-2 rounded-2xl bg-amber-100  text-purple-950 brightness-80 hover:bg-[#EAB8E4] hover:transition">See More</NavLink>
             </div>
 
          

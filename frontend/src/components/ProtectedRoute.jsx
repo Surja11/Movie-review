@@ -2,13 +2,15 @@
 import {jwtDecode} from "jwt-decode";
 import api from "../api";
 import { REFRESH_TOKEN,ACCESS_TOKEN } from "../constants";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
+import { AuthContext, AuthProvider } from "../context/AuthContext";
 
 const ProtectedRoute = ({children})=> {
 
   const [isAuthorized, setIsAuthorized] = useState(null)
 
+  const {checkAuth} = useContext(AuthContext)
   useEffect(()=>{
     auth().catch(()=>{
       setIsAuthorized(false)
@@ -46,6 +48,7 @@ const ProtectedRoute = ({children})=> {
       await refreshToken()
     }
     else{
+      checkAuth()
       setIsAuthorized(true)
     }
 
