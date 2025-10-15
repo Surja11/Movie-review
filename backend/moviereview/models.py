@@ -43,6 +43,7 @@ class CustomUser(AbstractUser):
 class Review(models.Model):
     user = models.ForeignKey(CustomUser, on_delete = models.CASCADE)
     movie_id = models.CharField(max_length = 100)
+    ratings = models.FloatField(default=0)
     movie_title = models.CharField(max_length = 200)
     review_text = models.TextField()
     likes = models.IntegerField(default = 0)

@@ -19,3 +19,10 @@ class RegisterSerializer(serializers.ModelSerializer):
       return user
     
 
+
+class ReviewSerializer(serializers.ModelSerializer):
+   username = serializers.CharField(source = 'user.username', read_only = True)
+   class Meta:
+      model = Review
+      fields = '__all__'
+      extra_kwargs = {'user': {'read_only':True}}
