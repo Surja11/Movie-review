@@ -16,8 +16,21 @@ const LoginForm = ({ route, method }) => {
 
   const name = method === "login" ? "Login" : "Register";
 
+  const isRegister = method === "register"
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!username || !password || (isRegister && (!email || !password2))) {
+      alert("Please fill all required fields");
+      return;
+    }
+
+    if (isRegister && password !== password2) {
+      alert("Passwords do not match");
+      return;
+    }
+
+
     setLoading(true);
 
     try {
@@ -38,6 +51,7 @@ const LoginForm = ({ route, method }) => {
         navigate("/login");
       }
     } catch (error) {
+
       alert(error);
     } finally {
       setLoading(false);

@@ -37,7 +37,7 @@ const Navbar = () => {
           </NavLink>
 
           <NavLink
-            to="/movies"
+            to="/movies/popular"
             className={({ isActive }) =>
               `text-[18px] font-semibold cursor-pointer relative transition ${
                 isActive ? "text-[#EAB8E4] after:w-full" : "hover:text-[#EAB8E4] after:w-0 hover:after:w-full"

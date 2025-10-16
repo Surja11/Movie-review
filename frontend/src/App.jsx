@@ -45,8 +45,9 @@ const App = () => {
       <Navbar/>
       <Routes>
         <Route path = "/" element = {<Home/>}/>
-        <Route path = "/movies" element = {<Movies/>}/>
-        <Route path = "/movies/:id" element = {<SingleMovie/>}/>
+        <Route path = "/movies/:category" element = {<Movies />}/>
+        <Route path="/movies" element={<Navigate to="/movies/popular" replace />} />
+        <Route path = "/movie/:id" element = {<SingleMovie/>}/>
 
         
           <Route path = "/user/:id" element = {
