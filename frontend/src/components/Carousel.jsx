@@ -57,7 +57,7 @@ const Carousel = () => {
             <div className="w-1/2 flex flex-col justify-center items-start text-amber-100 space-y-4 pr-8 pl-4">
               <h1 className="text-4xl font-bold">{movie.title}</h1>
               <p className="text-sm text-gray-300 line-clamp-4">{movie.overview}</p>
-              <NavLink to={`movies/${movie.id}`} className="border p-2 rounded-2xl bg-amber-100  text-purple-950 brightness-80 hover:bg-[#EAB8E4] hover:transition">See More</NavLink>
+              <NavLink to={`movie/${movie.id}`} className="border p-2 rounded-2xl bg-amber-100  text-purple-950 brightness-80 hover:bg-[#EAB8E4] hover:transition">See More</NavLink>
             </div>
 
          

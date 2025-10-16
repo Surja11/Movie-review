@@ -17,11 +17,20 @@ const SingleMovie = () => {
     data: movieData,
     isLoading,
     isError,
-    error,
+    error
   } = useQuery({
     queryKey: ["movie_details", id],
     queryFn: async () => {
       const response = await api.get(`/movies/${id}`);
+      return response.data;
+    },
+  });
+
+
+  const { data: casts, isLoading: isCastLoading, error: castError } = useQuery({
+    queryKey: ["movie_casts", id],
+    queryFn: async () => {
+      const response = await api.get(`/get_casts/${id}`);
       return response.data;
     },
   });
@@ -95,6 +104,24 @@ const SingleMovie = () => {
             <span className="font-semibold">Rating:</span>{" "}
             {movieData.vote_average} / 10 ({movieData.vote_count} votes)
           </p>
+          Casts
+          <div className="flex flex-wrap gap-4 justify-start mt-4">
+  {casts?.cast?.slice(0, 10).map((cast) => ( 
+    <div key={cast.cast_id} className="flex flex-col space-y-2 items-center">
+      <img
+        src={
+          cast.profile_path
+            ? `https://image.tmdb.org/t/p/w200${cast.profile_path}`
+            : "/placeholder.png"
+        }
+        alt={cast.name}
+        className="w-24 h-25 object-cover rounded-full brightness-80"
+      />
+      <p className="text-amber-100 text-sm text-center">{cast.name}</p>
+    </div>
+  ))}
+</div>
+
           <br />
           <br />
           <div className="flex justify-between">

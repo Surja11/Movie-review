@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
@@ -6,12 +6,17 @@ import { AuthContext } from "../context/AuthContext";
 const Navbar = () => {
   const navigate = useNavigate();
   const { isAuthenticated, user, checkAuth } = useContext(AuthContext);
+  const [search , setSearch] = useState("")
 
-  const handleLogout = () => {
-    localStorage.clear();
-    checkAuth(); 
-    navigate("/login");
-  };
+  
+
+  const handleSearch = (e)=>{
+      e.preventDefault();
+      if (search.trim()){
+        navigate(`/movies/search?query=${encodeURIComponent(search)}`);
+        setSearch("");
+      }
+  }
 
   return (
     <div className="flex justify-between items-center bg-gradient-to-r from-purple-950 via-black to-purple-950 text-amber-100 px-6 py-3 border-gray-700 shadow-md">
@@ -56,26 +61,34 @@ const Navbar = () => {
        <input
           type="text"
           placeholder="Search Movies..."
-          className="px-3 py-2 rounded bg-transparent border border-amber-100 text-amber-100 placeholder-amber-100 outline-none focus:ring-1 focus:ring-amber-100"
+          className="px-3 py-2 rounded bg-transparent border border-amber-100 text-amber-100 placeholder-amber-100 outline-none focus:ring-1 focus:ring-amber-100" value={search} onChange={(e)=>{setSearch(e.target.value)}}
         />
-        <button className="px-3 py-2 bg-amber-100 text-purple-900 font-semibold rounded hover:bg-[#EAB8E4]  hover:text-blackdf transition brightness-80">
+        <button className="px-3 py-2 bg-amber-100 text-purple-900 font-semibold rounded hover:bg-[#EAB8E4]  hover:text-blackdf transition brightness-80" onClick={handleSearch}>
           Search
         </button>
       </div>  
 
         {isAuthenticated ? (
-          <select
-            className="px-3 py-2 rounded bg-transparent border border-amber-100 text-amber-100 outline-none"
-            onChange={(e) => {
-              if (e.target.value === "logout") {
-                navigate("/logout")
-              }
-            }}
-          >
-            <option value="profile">{user?.username || user?.email || "Profile"}</option>
-            <option value="logout">Logout</option>
-          </select>
-        ) : (
+  <div className="relative group">
+    <button className="px-3 py-2 rounded bg-transparent border border-amber-100 text-amber-100 outline-none flex items-center">
+      {user?.username || user?.email || "Profile"} ▼
+    </button>
+    <div className="absolute right-0 mt-2 w-30 bg-[#341539] border border-amber-100 rounded shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+      <button
+        onClick={() => navigate(`/user/${user.id}`)}
+        className="block w-full text-left px-2 py-2 text-amber-100 hover:bg-purple-900"
+      >
+        Profile
+      </button>
+      <button
+        onClick={() => navigate("/logout")}
+        className="block w-full text-left px-2 py-2 text-amber-100 hover:bg-purple-900"
+      >
+        Logout
+      </button>
+    </div>
+  </div>
+)  : (
           <div className="flex justify-between space-x-2">
             <NavLink
               to="/login"
