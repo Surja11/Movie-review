@@ -1,11 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import React from "react";
+import React, { useContext, useRef, useState } from "react";
 import api from "../api";
+import Reviews from "./Reviews";
+import AddReview from "../components/AddReview";
+import { AuthContext } from "../context/AuthContext";
 
 const SingleMovie = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const [addreview, setAddreview] = useState(false)
+  const {isAuthenticated} = useContext(AuthContext)
+  const reviewRef = useRef(null)
 
   const {
     data: movieData,
@@ -32,6 +38,7 @@ const SingleMovie = () => {
       </div>
     );
 
+
   return (
     <div className="flex flex-col items-center">
       {/* Backdrop Section */}
@@ -42,7 +49,7 @@ const SingleMovie = () => {
           className="h-full w-full object-cover brightness-90"
         />
 
-        {/* Vignette Effect */}
+      
         <div
           className="absolute inset-0"
           style={{
@@ -69,7 +76,7 @@ const SingleMovie = () => {
           />
         </div>
 
-        <div className="md:w-3/4 text-center w-full md:self-start md:text-left text-amber-100 md:max-h-[80vh] overflow-y-auto space-y-4 pr-4">
+        <div className="md:w-3/4 text-center w-full md:self-start md:text-left text-amber-100 space-y-4 pr-4">
           <h1 className="font-bold text-3xl">{movieData.title}</h1>
           <p className="italic text-amber-200">{movieData.tagline}</p>
           <p>
@@ -90,8 +97,38 @@ const SingleMovie = () => {
             <span className="font-semibold">Rating:</span>{" "}
             {movieData.vote_average} / 10 ({movieData.vote_count} votes)
           </p>
+          <br/><br/>
+          <div className="flex justify-between">
+
+        <i>Speak your movie mind!</i>{" "}
+          <button className="p-2 rounded-2xl bg-[#c71585]" onClick={()=>setAddreview(true)}>Review it!</button>
+          </div>
+          <br/>
+               <Reviews movie = {movieData} refetchReview={reviewRef}/>
         </div>
+    
       </div>
+
+      {addreview &&(
+      
+        <div className = "fixed inset-0 flex items-center justify-center bg-opacity-50">
+          
+          <div className=" rounded-xl p-6 bg-[#290634]   border border-amber-100 brightness-75 shadow-lg relative w-1/2 sm:w-1/3">
+
+
+            <button onClick={()=>setAddreview(false)} className="absolute top-2 right-2 text-amber-100 border border-amber-50 p-1 rounded font-bold">X</button>
+{isAuthenticated ?
+            <AddReview movie = {movieData} onSuccess={()=>{
+              setAddreview(false);
+              if( reviewRef.current) reviewRef.current() 
+            }}/>:
+            navigate('/login')}
+          </div>
+        </div>  
+
+)}
+
+     
     </div>
   );
 };

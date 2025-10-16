@@ -3,7 +3,7 @@ import Home from './pages/Home'
 import Movies from './pages/Movies'
 import SingleMovie from './pages/SingleMovie'
 import UserProfile from './pages/UserProfile'
-import UserReviews from './pages/UserReviews'
+import Reviews from './pages/Reviews'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import { QueryClient ,QueryClientProvider} from '@tanstack/react-query'
@@ -56,9 +56,9 @@ const App = () => {
 
 
       
-          <Route path = "/UserReviews" element= {
+          <Route path = "/Reviews" element= {
             <ProtectedRoute>
-            <UserReviews/>
+            <Reviews/>
             </ProtectedRoute>
             }/>
         
