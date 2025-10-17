@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { use, useContext, useState } from 'react'
 import { AuthContext } from '../context/AuthContext'
 import AddReview from './AddReview'
 import { ToastContainer, toast } from 'react-toastify';
@@ -10,9 +10,33 @@ const SingleReview = ({review, movie, refetch}) => {
   const {isAuthenticated, user} = useContext(AuthContext)
   const [expanded, setExpanded] = useState(false)
   const [edit, setEdit] = useState(false)
+  const [liked, setLiked] = useState(review.is_liked);
+  const[likesCount, setLikesCount] = useState(review.likes_count);
 
   const max = 200
   const isLong = review.review_text.length>max
+
+  const handleLike = async ()=>{
+    if (!isAuthenticated){
+      alert("Log in to like the review")
+      return;
+    }
+    setLiked(!liked)
+    setLikesCount(prev=> prev+(liked? -1:1));
+    
+
+    try{
+      const res = await api.post(`/reviews/${review.id}/like/`);
+      setLiked(res.data.liked)
+    
+
+    }catch(error){
+      console.log(error);
+      setLiked(liked);
+      setLikesCount(prev => prev + (liked ? 1 : -1));
+    }
+
+  }
 
   const handleDelete = async()=>{
     try{
@@ -41,7 +65,11 @@ const SingleReview = ({review, movie, refetch}) => {
 
   return (
     <div className='flex flex-col space-y-4 text-amber-100'>
-          <p className="">Review by <b className='text-amber-50'>{review.username}</b></p>
+      <div className='flex justify-between items-center'><p className="">Review by <b className='text-amber-50'>{review.username}</b></p>
+      <p className="mr-3">{(review.updated_at).split("T")[0]}</p>
+      
+      </div>
+          
           <p className={`${!expanded && isLong? 'line-clamp-4': 
             ''
           }`}>{review.review_text}</p>
@@ -52,7 +80,15 @@ const SingleReview = ({review, movie, refetch}) => {
         >{expanded? 'Show less': 'Show more'}</button>
             )
           }
-          <p>{review.likes} likes</p>
+          <div className='flex justify-between items-center'>
+          <button
+        onClick={handleLike}
+        className={`mt-2 flex items-center gap-2 ${
+          liked ? 'text-white' : 'text-white'
+        }`}
+      >👍🏻 {likesCount}</button>
+      <p className='mr-5'>Rating: {review.ratings}</p>
+      </div>
            {isAuthenticated && user.id === review.user && (
         <div className="flex space-x-4">
           <button className="text-yellow-400 hover:underline" onClick={()=>setEdit(true)}>Edit</button>

@@ -11,5 +11,6 @@ urlpatterns = [
   path("search_movies/", search_movies, name="search_movies" ),
   path('get_casts/<int:id>/', get_casts, name = "get_casts"),
   path('filter_movies/', filter_movies, name="filter_movies"),
-  path('reviews/user/<int:id>/',get_user_reviews,name ="userreviews")
+  path('reviews/user/<int:id>/',get_user_reviews,name ="userreviews"),
+  path('reviews/<id>/like/',like_review, name = "like_review"),
 ]

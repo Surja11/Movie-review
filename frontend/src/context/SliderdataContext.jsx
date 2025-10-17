@@ -6,15 +6,12 @@ export const SliderdataContext = createContext(null);
 
 export const SliderdataProvider = ({children})=>{
 
-  //fetching for slider
-
   const {data: sliderdata, isLoading, error} = useQuery({
     queryKey: ["sliderdata"],
     queryFn: async()=>{
       const res = await api.get("/movies/")
       return res.data.results
     }
-    
     
   });
 

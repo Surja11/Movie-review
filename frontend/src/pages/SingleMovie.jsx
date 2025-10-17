@@ -127,7 +127,7 @@ const SingleMovie = () => {
           <div className="flex justify-between">
             <i>Speak your movie mind!</i>{" "}
             <button
-              className="p-2 rounded-2xl bg-[#c71585]"
+              className="p-2 rounded-2xl bg-[#c71585] hover:scale-105 hover:transition-all hover:cursor-pointer hover:bg-[#eab8e4] hover:text-purple-950"
               onClick={() => setAddreview(true)}
             >
               Review it!

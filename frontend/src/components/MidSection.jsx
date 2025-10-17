@@ -44,9 +44,7 @@ const MidSection = () => {
       </div>
      
       <div className="flex flex-wrap gap-4 m-5 w-[90%] items-center justify-evenly">
-        {(trendingMovies
-
-          ||[]
+        {(trendingMovies||[]
         ).slice(0, 5).map((movie) => (
           <MovieCard key={movie.id} movie={movie} />
         ))}

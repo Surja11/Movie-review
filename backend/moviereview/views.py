@@ -200,7 +200,7 @@ class ReviewViewSet(viewsets.ViewSet):
       movie_id = request.query_params.get('movie_id')
       if movie_id:
          reviews = Review.objects.filter(movie_id = movie_id)
-         serializer = ReviewSerializer(reviews, many = True)
+         serializer = ReviewSerializer(reviews, many = True,context = {'request': request})
          return Response(serializer.data, status = status.HTTP_200_OK)
       return Response({'error': "movie_id not provided"}, status=status.HTTP_400_BAD_REQUEST)
       
@@ -215,7 +215,7 @@ class ReviewViewSet(viewsets.ViewSet):
    @permission_classes([AllowAny])
    def retrieve(self, request, pk = None):
       review = get_object_or_404(Review,pk = pk)
-      serializer = ReviewSerializer(review)
+      serializer = ReviewSerializer(review, context={'request':request})
       return Response(serializer.data, status= status.HTTP_200_OK)
    
    @permission_classes([IsAuthenticated])
@@ -275,8 +275,30 @@ def get_user_reviews(request, id =None):
     try:
         user = request.user
         reviews = Review.objects.filter(user=user)
-        serializer = ReviewSerializer(reviews, many=True)
+        serializer = ReviewSerializer(reviews, many=True, context ={'request': request})
         print(serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def like_review(request, id):
+   
+    review = Review.objects.get(pk = id )
+    user = request.user
+
+    if user in review.likes.all():
+      review.likes.remove(user)
+      liked = False
+    else:
+      review.likes.add(user)
+      liked = True
+    
+    return Response({
+       "liked": liked,
+        "likes": review.total_likes(),
+    })
+

@@ -21,9 +21,24 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-   username = serializers.CharField(source = 'user.username', read_only = True)
-   
-   class Meta:
-      model = Review
-      fields = '__all__'
-      extra_kwargs = {'user': {'read_only':True}}
+  username = serializers.CharField(source = 'user.username', read_only = True)
+  is_liked = serializers.SerializerMethodField()
+  likes_count =  serializers.SerializerMethodField()
+
+  class Meta:
+    model = Review
+    fields = '__all__'
+    extra_kwargs = {'user': {'read_only':True}}
+
+  def get_is_liked(self, obj):
+     user = self.context['request'].user
+     return user.is_authenticated and obj.likes.filter(id = user.id).exists()
+  
+  def get_likes_count(self, obj):
+     return obj.total_likes()
+
+     
+
+  
+
+    

@@ -3,10 +3,13 @@ import { AuthContext } from '../context/AuthContext'
 import SingleReview from '../components/SingleReview'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import api from '../api'
+import { useNavigate } from 'react-router-dom'
 
 const UserProfile = () => {
   const { isAuthenticated, user } = useContext(AuthContext)
   const queryClient = useQueryClient()
+
+  const navigate = useNavigate()
 
   if (!isAuthenticated || !user) {
     return <div>Loading user...</div>
@@ -40,7 +43,7 @@ const UserProfile = () => {
       {reviews && reviews.length > 0 ? (
         reviews.map((review) => (
           <>
-          <p className='font-bold'>Movie: {review.movie_title}</p>
+          <p className='font-bold cursor-pointer' onClick={()=>navigate(`/movie/${review.movie_id}`)}>Movie: {review.movie_title}</p>
           <SingleReview
             key={review.id}
             review={review}
