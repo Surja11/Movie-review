@@ -12,6 +12,7 @@ import { BrowserRouter,Routes,Route, Navigate } from 'react-router-dom'
 import ProtectedRoute from './components/ProtectedRoute'
 import { SliderdataContext, SliderdataProvider } from './context/SliderdataContext'
 import { AuthContext } from './context/AuthContext'
+import Footer from './components/Footer'
 
 
 export const Logout = ()=>{
@@ -69,6 +70,7 @@ const App = () => {
         <Route path = "/register" element = {<RegisterAndLogout/>}/>
         <Route path = "/logout" element = {<Logout/>}/>
       </Routes>
+      <Footer/>
       
       </BrowserRouter>
 

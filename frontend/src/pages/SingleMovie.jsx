@@ -135,6 +135,8 @@ const SingleMovie = () => {
           </div>
           <br />
           <Reviews movie={movieData} refetchReview={reviewRef} />
+          <br/>
+          <br/>
         </div>
       </div>
 
